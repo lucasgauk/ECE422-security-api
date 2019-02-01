@@ -1,6 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Model.User.User;
+import com.example.demo.Model.User.UserResponse;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,8 @@ public class UserController {
 
   @GetMapping("/login")
   @ResponseBody
-  public User findUser(@RequestParam String username,
-                       @RequestParam String password) {
-    return this.userService.getUser(username, password);
+  public UserResponse findUser(@RequestParam String username,
+                               @RequestParam String password) {
+    return UserResponse.fromModel(this.userService.getUser(username, password));
   }
 }
