@@ -1,20 +1,16 @@
 package com.example.demo.Model.File;
 
-import java.io.File;
 import lombok.Data;
 
 @Data
 public class FileResponse {
 
-  private File file;
-  private String type;
+  private byte[] bytes;
+  private String extension;
 
-  public FileResponse(File file, String type) {
-    this.file = file;
-    this.type = type;
+  public FileResponse(byte[] bytes, String extension) {
+    this.bytes = bytes;
+    this.extension = extension;
   }
 
-  public static FileResponse fromFile(File file) {
-    return null;
-  }
 }

@@ -1,8 +1,13 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Model.File.FileResponse;
+import com.example.demo.Model.File.FileTypeResponse;
 import com.example.demo.Service.FileService;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +25,21 @@ public class FileController {
     this.fileService = fileService;
   }
 
-  @GetMapping("files")
-  @ResponseBody
-  public List<String> getAllFiles(@RequestParam(required = false) String path) {
-    return this.fileService.getFileNames(path == null ? "" : path);
+  @GetMapping
+  public ResponseEntity<List<FileTypeResponse>> getAllFiles(@RequestParam(required = false) String path) {
+    List<FileTypeResponse> files = this.fileService.getFiles(path == null ? "" : path);
+    if (files == null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    return ResponseEntity.ok(files);
+  }
+
+  @GetMapping("/bytes")
+  public ResponseEntity<FileResponse> getFileBytes(@RequestParam String path) {
+    try {
+      return ResponseEntity.ok(new FileResponse(fileService.getFileBytes(path), fileService.getFileType(path)));
+    } catch (IOException e) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
   }
 }
