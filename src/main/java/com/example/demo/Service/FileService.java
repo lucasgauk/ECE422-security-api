@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileTypeResponse;
 import java.io.IOException;
 import java.util.List;
@@ -13,5 +14,7 @@ public interface FileService {
   String getFileType(String path);
 
   byte[] getFileBytes(String path) throws IOException;
+
+  boolean saveFile(FileRequest file);
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.Service.Implementation;
 
+import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileTypeResponse;
 import com.example.demo.Repository.FileRepository;
 import com.example.demo.Service.FileService;
@@ -43,5 +44,9 @@ public class FileServiceImp implements FileService {
   @Override
   public byte[] getFileBytes(String path) throws IOException {
     return this.fileRepository.getBytes(new File(basepath + path));
+  }
+
+  public boolean saveFile(FileRequest file) {
+    return this.fileRepository.saveFile(file.getBytes(), this.basepath + file.getPath() + file.getFileName() + "." + file.getExtension());
   }
 }

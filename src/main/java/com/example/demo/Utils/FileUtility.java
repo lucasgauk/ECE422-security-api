@@ -1,6 +1,6 @@
 package com.example.demo.Utils;
 
-public class FileUtils {
+public class FileUtility {
 
   public static String getExtension(String path) {
     String extension = "";
