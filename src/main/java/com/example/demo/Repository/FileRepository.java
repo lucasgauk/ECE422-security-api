@@ -29,7 +29,6 @@ public class FileRepository {
 
   public boolean saveFile(byte[] bytes, String path) {
     try {
-      System.out.println(path);
       FileOutputStream stream = new FileOutputStream(path);
       stream.write(bytes);
       stream.close();
