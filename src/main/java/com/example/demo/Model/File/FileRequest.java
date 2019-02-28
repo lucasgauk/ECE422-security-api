@@ -16,4 +16,9 @@ public class FileRequest {
     this.fileName = fileName;
     this.path = path;
   }
+
+  public String getPath() {
+    if (this.path == null) { return ""; }
+    return this.path;
+  }
 }

@@ -2,8 +2,10 @@ package com.example.demo.Service.Implementation;
 
 import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileTypeResponse;
+import com.example.demo.Model.Permission.Permission;
 import com.example.demo.Repository.FileRepository;
 import com.example.demo.Repository.FileSystemRepository;
+import com.example.demo.Repository.PermissionRepository;
 import com.example.demo.Service.FileSystemService;
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +22,17 @@ public class FileSystemServiceImp implements FileSystemService {
 
   private FileSystemRepository fileSystemRepository;
   private FileRepository fileRepository;
+  private PermissionRepository permissionRepository;
 
   @Value("${filesystem.basepath}")
   private String basePath;
 
   @Autowired
-  public FileSystemServiceImp(FileSystemRepository fileSystemRepository, FileRepository fileRepository) {
+  public FileSystemServiceImp(FileSystemRepository fileSystemRepository, FileRepository fileRepository,
+                              PermissionRepository permissionRepository) {
     this.fileSystemRepository = fileSystemRepository;
     this.fileRepository = fileRepository;
+    this.permissionRepository = permissionRepository;
   }
 
   @Override
@@ -54,7 +59,7 @@ public class FileSystemServiceImp implements FileSystemService {
    * Save new file into the filesystem and the database.
    */
   public boolean saveFile(FileRequest file) {
-    if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + file.getFileName() + "." + file.getExtension())) {
+    if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + "/" + file.getFileName() + "." + file.getExtension())) {
       this.fileRepository.save(com.example.demo.Model.File.File.fromRequest(file));
       return true;
     }
