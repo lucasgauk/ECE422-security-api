@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface FileService {
+public interface FileSystemService {
 
   List<FileTypeResponse> getFiles(String path);
 
