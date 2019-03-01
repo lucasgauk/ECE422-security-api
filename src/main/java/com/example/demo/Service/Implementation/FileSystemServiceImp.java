@@ -9,6 +9,7 @@ import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.FileService;
 import com.example.demo.Service.FileSystemService;
 import com.example.demo.Service.PermissionService;
+import com.example.demo.Service.UserGroupService;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,17 +27,20 @@ public class FileSystemServiceImp implements FileSystemService {
   private FileService fileService;
   private PermissionService permissionService;
   private UserRepository userRepository;
+  private UserGroupService userGroupService;
 
   @Value("${filesystem.basepath}")
   private String basePath;
 
   @Autowired
   public FileSystemServiceImp(FileSystemRepository fileSystemRepository, FileService fileService,
-                              PermissionService permissionService, UserRepository userRepository) {
+                              PermissionService permissionService, UserRepository userRepository,
+                              UserGroupService userGroupService) {
     this.fileSystemRepository = fileSystemRepository;
     this.fileService = fileService;
     this.permissionService = permissionService;
     this.userRepository = userRepository;
+    this.userGroupService = userGroupService;
   }
 
   @Override
@@ -69,7 +73,8 @@ public class FileSystemServiceImp implements FileSystemService {
     if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + "/" + file.getFileName())) {
       com.example.demo.Model.File.File fileModel = com.example.demo.Model.File.File.fromRequest(file);
       this.fileService.save(fileModel);
-      this.permissionService.save(new Permission(true, true, fileModel, this.userRepository.getUserByUsername(createdBy)));
+      this.permissionService.authorizeGroup(this.userGroupService.getUserGroupByUser(this.userRepository.getUserByUsername(createdBy)),
+                                            fileModel);
       return true;
     }
     return false;

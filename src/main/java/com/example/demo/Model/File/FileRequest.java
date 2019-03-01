@@ -21,4 +21,7 @@ public class FileRequest {
     if (this.path == null) { return ""; }
     return this.path;
   }
+
+  public FileRequest() {
+  }
 }
