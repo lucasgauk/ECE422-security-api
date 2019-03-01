@@ -12,8 +12,11 @@ import com.example.demo.Service.PermissionService;
 import com.example.demo.Service.UserGroupService;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,9 @@ public class FileSystemServiceImp implements FileSystemService {
     if (files == null) { return null; }
     return new ArrayList<>(Arrays.asList(files)).stream()
                                                 .map(file -> new FileTypeResponse(file.getPath().replace(basePath, "/"),
-                                                                                  this.getFileType(file.getPath().replace(basePath, "/"))))
+                                                                                  this.getFileType(file.getPath().replace(basePath, "/")),
+                                                                                  this.getCreatedAt(file.getPath().replace(basePath, "/")),
+                                                                                  this.getModifiedAt(file.getPath().replace(basePath, "/"))))
                                                 .filter(file -> this.permissionService.authorizedToRead(
                                                     this.userRepository.getUserByUsername(username),
                                                     this.fileService.findByPath(file.getPath().replace(basePath, "/"))))
@@ -78,5 +83,25 @@ public class FileSystemServiceImp implements FileSystemService {
       return true;
     }
     return false;
+  }
+
+  @Override public Date getModifiedAt(String path) {
+    try {
+      return new Date(Files.readAttributes(new File(this.basePath + path).toPath(),
+                                           BasicFileAttributes.class).lastModifiedTime().toMillis());
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override public Date getCreatedAt(String path) {
+    try {
+      return new Date(Files.readAttributes(new File(this.basePath + path).toPath(),
+                                           BasicFileAttributes.class).creationTime().toMillis());
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

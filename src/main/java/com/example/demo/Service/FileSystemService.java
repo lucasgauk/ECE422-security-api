@@ -4,6 +4,7 @@ import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileTypeResponse;
 import com.example.demo.Model.User.User;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,9 @@ public interface FileSystemService {
   byte[] getFileBytes(String path) throws IOException;
 
   boolean saveFile(FileRequest file, String username);
+
+  Date getModifiedAt(String path) throws IOException;
+
+  Date getCreatedAt(String path) throws IOException;
 
 }

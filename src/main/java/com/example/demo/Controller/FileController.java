@@ -40,7 +40,10 @@ public class FileController {
   @GetMapping("/bytes")
   public ResponseEntity<FileResponse> getFileBytes(@RequestParam String path) {
     try {
-      return ResponseEntity.ok(new FileResponse(fileSystemService.getFileBytes(path), fileSystemService.getFileType(path)));
+      return ResponseEntity.ok(new FileResponse(this.fileSystemService.getFileBytes(path),
+                                                this.fileSystemService.getFileType(path),
+                                                this.fileSystemService.getCreatedAt(path),
+                                                this.fileSystemService.getModifiedAt(path)));
     } catch (IOException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

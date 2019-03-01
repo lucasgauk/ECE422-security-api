@@ -16,6 +16,7 @@
 *.iml
 *.ipr
 *.log
+application-dev.properties
 
 ### NetBeans ###
 /nbproject/private/
