@@ -1,28 +1,12 @@
 package com.example.demo.Repository;
 
-import com.example.demo.Utils.FileUtils;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import com.example.demo.Model.File.File;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class FileRepository {
+public interface FileRepository extends JpaRepository<File, Long> {
 
-  public File[] getAll(String path) {
-    return new File(path).listFiles();
-  }
-
-  public File getFile(String path) {
-    return new File(path);
-  }
-
-  public byte[] getBytes(File file) throws IOException {
-    return Files.readAllBytes(file.toPath());
-  }
-
-  public String getFileType(String path) {
-    return new File(path).listFiles() == null ? FileUtils.getExtension(path) : "folder";
-  }
+  File findByPath(String path);
 
 }

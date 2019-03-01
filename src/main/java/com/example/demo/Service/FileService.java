@@ -1,17 +1,13 @@
 package com.example.demo.Service;
 
-import com.example.demo.Model.File.FileTypeResponse;
-import java.io.IOException;
-import java.util.List;
+import com.example.demo.Model.File.File;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface FileService {
 
-  List<FileTypeResponse> getFiles(String path);
+  void save(File file);
 
-  String getFileType(String path);
-
-  byte[] getFileBytes(String path) throws IOException;
+  File findByPath(String path);
 
 }
