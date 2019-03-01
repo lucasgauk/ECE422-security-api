@@ -1,6 +1,7 @@
 package com.example.demo.Model.File;
 
 import com.example.demo.Model.Permission.Permission;
+import com.example.demo.Utils.FileUtility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Entity;
@@ -20,20 +21,20 @@ public class File {
   private Long id;
   private String path;
   private String extension;
-  private String fileName;
 
   @JsonIgnore
   @OneToMany(mappedBy = "file") private List<Permission> permissions;
 
-  public File(String path, String extension, String fileName) {
+  public File(String path, String extension) {
     this.path = path;
     this.extension = extension;
-    this.fileName = fileName;
+  }
+
+  public File() {
   }
 
   public static File fromRequest(FileRequest request) {
-    return new File(request.getPath(),
-                    request.getExtension(),
-                    request.getFileName());
+    return new File(request.getPath() + request.getFileName(),
+                    request.getExtension());
   }
 }

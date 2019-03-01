@@ -23,4 +23,6 @@ public class UserServiceImp implements UserService {
   public User getUser(String username, String password) {
     return this.userRepository.getUserByUsernameAndPassword(username, password);
   }
+
+  public User getUser(String username) { return this.userRepository.getUserByUsername(username); }
 }

@@ -5,6 +5,7 @@ import com.example.demo.Model.File.FileResponse;
 import com.example.demo.Model.File.FileTypeResponse;
 import com.example.demo.Service.FileSystemService;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class FileController {
   }
 
   @GetMapping
-  public ResponseEntity<List<FileTypeResponse>> getAllFiles(@RequestParam(required = false) String path) {
-    List<FileTypeResponse> files = this.fileSystemService.getFiles(path == null ? "" : path);
+  public ResponseEntity<List<FileTypeResponse>> getAllFiles(@RequestParam(required = false) String path, Principal principal) {
+    List<FileTypeResponse> files = this.fileSystemService.getFiles(path == null ? "" : path, principal.getName());
     if (files == null) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -46,8 +47,8 @@ public class FileController {
   }
 
   @PostMapping
-  public ResponseEntity uploadFile(@RequestBody FileRequest fileRequest) {
-    if (this.fileSystemService.saveFile(fileRequest)) {
+  public ResponseEntity uploadFile(@RequestBody FileRequest fileRequest, Principal principal) {
+    if (this.fileSystemService.saveFile(fileRequest, principal.getName())) {
       return new ResponseEntity(HttpStatus.CREATED);
     } else {
       return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -10,4 +10,6 @@ public interface UserService {
 
   void save(User user);
 
+  User getUser(String username);
+
 }

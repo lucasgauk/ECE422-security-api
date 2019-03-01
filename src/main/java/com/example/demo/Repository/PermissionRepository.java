@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
-  List<Permission> getAllByFileAndUserAndReadIsTrue(File file, User user);
+  List<Permission> getAllByFileAndUserAndReadAllowedIsTrue(File file, User user);
 
-  List<Permission> getAllByFileAndUserAndWriteIsTrue(File file, User user);
+  List<Permission> getAllByFileAndUserAndWriteAllowedIsTrue(File file, User user);
 
   List<Permission> getAllByUser(User user);
 }
