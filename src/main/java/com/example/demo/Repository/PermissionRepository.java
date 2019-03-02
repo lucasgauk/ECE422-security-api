@@ -15,4 +15,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
   List<Permission> getAllByFileAndUserAndWriteAllowedIsTrue(File file, User user);
 
   List<Permission> getAllByUser(User user);
+
+  void deleteAllByFile(File file);
 }

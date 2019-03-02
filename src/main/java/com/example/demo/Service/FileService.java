@@ -10,4 +10,6 @@ public interface FileService {
 
   File findByPath(String path);
 
+  void deleteByPath(String path);
+
 }
