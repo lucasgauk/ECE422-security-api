@@ -46,4 +46,10 @@ public class PermissionServiceImp implements PermissionService {
     List<User> usersInGroup = this.userService.getUsersByUserGroup(userGroup);
     usersInGroup.forEach(user -> this.save(new Permission(true, true, file, user)));
   }
+
+  @Override
+  @Transactional
+  public void deleteByFile(File file) {
+    this.permissionRepository.deleteAllByFile(file);
+  }
 }

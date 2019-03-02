@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Model.File.FileDeleteRequest;
 import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileResponse;
 import com.example.demo.Model.File.FileTypeResponse;
@@ -56,5 +57,11 @@ public class FileController {
     } else {
       return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @PostMapping("/delete")
+  public ResponseEntity deleteFile(@RequestBody FileDeleteRequest request) {
+    this.fileSystemService.deleteFile(request.getPath());
+    return new ResponseEntity(HttpStatus.OK);
   }
 }

@@ -20,4 +20,6 @@ public interface PermissionService {
 
   void authorizeGroup(UserGroup userGroup, File file);
 
+  void deleteByFile(File file);
+
 }

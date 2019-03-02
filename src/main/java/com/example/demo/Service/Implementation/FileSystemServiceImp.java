@@ -2,8 +2,6 @@ package com.example.demo.Service.Implementation;
 
 import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileTypeResponse;
-import com.example.demo.Model.Permission.Permission;
-import com.example.demo.Model.User.User;
 import com.example.demo.Repository.FileSystemRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.FileService;
@@ -19,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -72,11 +71,17 @@ public class FileSystemServiceImp implements FileSystemService {
   }
 
   /**
-   * Save new file into the filesystem and the database. Add a new permission for it.
+   * Save new file into the filesystem and the database. Add a new permission for it. If there's a file with the same path,
+   * delete it and the permissions for that file.
    */
+  @Override
   public boolean saveFile(FileRequest file, String createdBy) {
+    com.example.demo.Model.File.File fileModel = com.example.demo.Model.File.File.fromRequest(file);
+    com.example.demo.Model.File.File existingFile = this.fileService.findByPath(fileModel.getPath());
+    if (existingFile != null) {
+      this.deleteFile(existingFile.getPath());
+    }
     if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + "/" + file.getFileName())) {
-      com.example.demo.Model.File.File fileModel = com.example.demo.Model.File.File.fromRequest(file);
       this.fileService.save(fileModel);
       this.permissionService.authorizeGroup(this.userGroupService.getUserGroupByUser(this.userRepository.getUserByUsername(createdBy)),
                                             fileModel);
@@ -85,7 +90,8 @@ public class FileSystemServiceImp implements FileSystemService {
     return false;
   }
 
-  @Override public Date getModifiedAt(String path) {
+  @Override
+  public Date getModifiedAt(String path) {
     try {
       return new Date(Files.readAttributes(new File(this.basePath + path).toPath(),
                                            BasicFileAttributes.class).lastModifiedTime().toMillis());
@@ -95,13 +101,24 @@ public class FileSystemServiceImp implements FileSystemService {
     }
   }
 
-  @Override public Date getCreatedAt(String path) {
+  @Override
+  public Date getCreatedAt(String path) {
     try {
       return new Date(Files.readAttributes(new File(this.basePath + path).toPath(),
                                            BasicFileAttributes.class).creationTime().toMillis());
     } catch (IOException e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  @Override
+  @Transactional
+  public void deleteFile(String path) {
+    File file = this.fileSystemRepository.getFile(this.basePath + path);
+    if (file.delete()) {
+      this.permissionService.deleteByFile(this.fileService.findByPath(path));
+      this.fileService.deleteByPath(path);
     }
   }
 }

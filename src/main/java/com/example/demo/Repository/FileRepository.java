@@ -9,4 +9,6 @@ public interface FileRepository extends JpaRepository<File, Long> {
 
   File findByPath(String path);
 
+  void deleteAllByPath(String path);
+
 }

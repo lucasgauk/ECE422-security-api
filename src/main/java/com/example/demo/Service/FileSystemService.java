@@ -23,4 +23,6 @@ public interface FileSystemService {
 
   Date getCreatedAt(String path) throws IOException;
 
+  void deleteFile(String path);
+
 }
