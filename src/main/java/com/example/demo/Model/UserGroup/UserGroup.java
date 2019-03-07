@@ -17,6 +17,7 @@ import lombok.Data;
 public class UserGroup {
 
   @Id
+  @JsonIgnore
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;

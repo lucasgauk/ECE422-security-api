@@ -31,4 +31,8 @@ public class UserServiceImp implements UserService {
   @Override public List<User> getUsersByUserGroup(UserGroup userGroup) {
     return this.userRepository.getAllByUserGroup(userGroup);
   }
+
+  @Override public List<User> getAll() {
+    return this.userRepository.findAll();
+  }
 }

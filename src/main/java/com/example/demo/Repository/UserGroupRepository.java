@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface UserGroupRepository extends JpaRepository<UserGroup, Long> {
 
   UserGroup getByUsers(User user);
+
+  UserGroup getAllByName(String name);
+
+  UserGroup findAllById(Long id);
 }
