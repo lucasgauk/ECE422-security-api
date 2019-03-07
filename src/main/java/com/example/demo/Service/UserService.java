@@ -16,4 +16,6 @@ public interface UserService {
 
   List<User> getUsersByUserGroup(UserGroup userGroup);
 
+  List<User> getAll();
+
 }

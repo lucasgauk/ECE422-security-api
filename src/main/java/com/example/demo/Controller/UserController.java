@@ -5,6 +5,8 @@ import com.example.demo.Model.User.UserResponse;
 import com.example.demo.Model.UserGroup.UserGroup;
 import com.example.demo.Service.UserGroupService;
 import com.example.demo.Service.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,14 @@ public class UserController {
   public UserController(UserService userService, UserGroupService userGroupService) {
     this.userService = userService;
     this.userGroupService = userGroupService;
+  }
+
+  @GetMapping
+  @ResponseBody
+  public ResponseEntity<List<UserResponse>> getAll() {
+    return ResponseEntity.ok(this.userService.getAll()
+                                             .stream()
+                                             .map(UserResponse::fromModel).collect(Collectors.toList()));
   }
 
   @GetMapping("/login")
