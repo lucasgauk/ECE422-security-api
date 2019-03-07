@@ -9,4 +9,10 @@ public interface UserGroupService {
 
   UserGroup getUserGroupByUser(User user);
 
+  void save(UserGroup userGroup);
+
+  UserGroup getUserGroup(Long id);
+
+  UserGroup getUserGroup(String name);
+
 }

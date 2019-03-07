@@ -1,6 +1,5 @@
 package com.example.demo.Model.User;
 
-import com.example.demo.Model.File.File;
 import com.example.demo.Model.Permission.Permission;
 import com.example.demo.Model.UserGroup.UserGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,6 +29,7 @@ public class User {
 
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "user_group")
   private UserGroup userGroup;
 

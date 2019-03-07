@@ -17,7 +17,19 @@ public class UserGroupServiceImp implements UserGroupService {
     this.userGroupRepository = userGroupRepository;
   }
 
+  @Override public void save(UserGroup userGroup) {
+    this.userGroupRepository.save(userGroup);
+  }
+
+  @Override public UserGroup getUserGroup(Long id) {
+    return this.userGroupRepository.findAllById(id);
+  }
+
   @Override public UserGroup getUserGroupByUser(User user) {
     return this.userGroupRepository.getByUsers(user);
+  }
+
+  @Override public UserGroup getUserGroup(String name) {
+    return this.userGroupRepository.getAllByName(name);
   }
 }
