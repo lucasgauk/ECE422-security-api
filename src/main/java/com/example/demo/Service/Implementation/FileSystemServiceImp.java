@@ -50,13 +50,16 @@ public class FileSystemServiceImp implements FileSystemService {
     File[] files = this.fileSystemRepository.getAll(basePath + path);
     if (files == null) { return null; }
     return new ArrayList<>(Arrays.asList(files)).stream()
-                                                .map(file -> new FileTypeResponse(file.getPath().replace(basePath, "/"),
+                                                .map(file -> new FileTypeResponse(this.fileService.findByPath(file.getPath().replace(basePath, "")
+                                                                                                                  .substring(0, file.getPath().replace(basePath, "").lastIndexOf("."))).getId(),
+                                                                                  file.getPath().replace(basePath, ""),
                                                                                   this.getFileType(file.getPath().replace(basePath, "/")),
                                                                                   this.getCreatedAt(file.getPath().replace(basePath, "/")),
                                                                                   this.getModifiedAt(file.getPath().replace(basePath, "/"))))
                                                 .filter(file -> this.permissionService.authorizedToRead(
                                                     this.userRepository.getUserByUsername(username),
-                                                    this.fileService.findByPath(file.getPath().replace(basePath, "/"))))
+                                                    this.fileService.findByPath(file.getPath().replace(basePath, "")
+                                                                                    .substring(0, file.getPath().replace(basePath, "").lastIndexOf(".")))))
                                                 .collect(Collectors.toList());
   }
 
@@ -81,7 +84,7 @@ public class FileSystemServiceImp implements FileSystemService {
     if (existingFile != null) {
       this.deleteFile(existingFile.getPath());
     }
-    if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + "/" + file.getFileName())) {
+    if (this.fileSystemRepository.saveFile(file.getBytes(), this.basePath + file.getPath() + "/" + file.getFileName() + "." + file.getExtension())) {
       this.fileService.save(fileModel);
       this.permissionService.authorizeGroup(this.userGroupService.getUserGroupByUser(this.userRepository.getUserByUsername(createdBy)),
                                             fileModel);

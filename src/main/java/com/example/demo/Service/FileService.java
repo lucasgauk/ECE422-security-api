@@ -12,4 +12,6 @@ public interface FileService {
 
   void deleteByPath(String path);
 
+  File find(Long id);
+
 }

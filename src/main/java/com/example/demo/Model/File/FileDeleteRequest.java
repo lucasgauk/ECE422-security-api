@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class FileDeleteRequest {
 
-  private String path;
+  private Long fileId;
 
-  public FileDeleteRequest(String path) {
-    this.path = path;
+  public FileDeleteRequest(Long fileId) {
+    this.fileId = fileId;
   }
 
   public FileDeleteRequest() {
