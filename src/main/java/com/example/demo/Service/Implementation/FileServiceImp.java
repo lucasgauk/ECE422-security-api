@@ -30,4 +30,8 @@ public class FileServiceImp implements FileService {
   public void deleteByPath(String path) {
     this.fileRepository.deleteAllByPath(path);
   }
+
+  public File find(Long id) {
+    return this.fileRepository.getOne(id);
+  }
 }

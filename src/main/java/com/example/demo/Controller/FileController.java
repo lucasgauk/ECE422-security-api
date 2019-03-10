@@ -4,11 +4,13 @@ import com.example.demo.Model.File.FileDeleteRequest;
 import com.example.demo.Model.File.FileRequest;
 import com.example.demo.Model.File.FileResponse;
 import com.example.demo.Model.File.FileTypeResponse;
+import com.example.demo.Service.FileService;
 import com.example.demo.Service.FileSystemService;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class FileController {
 
   private FileSystemService fileSystemService;
+  private FileService fileService;
 
   @Autowired
-  public FileController(FileSystemService fileSystemService) {
+  public FileController(FileSystemService fileSystemService, FileService fileService) {
     this.fileSystemService = fileSystemService;
+    this.fileService = fileService;
   }
 
   @GetMapping
@@ -39,8 +43,9 @@ public class FileController {
   }
 
   @GetMapping("/bytes")
-  public ResponseEntity<FileResponse> getFileBytes(@RequestParam String path) {
+  public ResponseEntity<FileResponse> getFileBytes(@RequestParam Long fileId) {
     try {
+      String path = this.fileService.find(fileId).getPath() + "." + this.fileService.find(fileId).getExtension();
       return ResponseEntity.ok(new FileResponse(this.fileSystemService.getFileBytes(path),
                                                 this.fileSystemService.getFileType(path),
                                                 this.fileSystemService.getCreatedAt(path),
@@ -61,7 +66,8 @@ public class FileController {
 
   @PostMapping("/delete")
   public ResponseEntity deleteFile(@RequestBody FileDeleteRequest request) {
-    this.fileSystemService.deleteFile(request.getPath());
+    String path = this.fileService.find(request.getFileId()).getPath() + "." + this.fileService.find(request.getFileId()).getExtension();
+    this.fileSystemService.deleteFile(path);
     return new ResponseEntity(HttpStatus.OK);
   }
 }
